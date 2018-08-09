@@ -14,6 +14,16 @@ PyDoc_STRVAR(
         "Return:\n"
         "    image(bytes) : decoded image data"
     );
+PyDoc_STRVAR(
+    etc2a8_doc,
+    "Decode ETC2A8 format bytes to RGBA bytes.\n\n"
+        "Args:\n"
+        "    rawdata(bytes): bytes of etc1 image data\n"
+        "    width(int): original image's width\n"
+        "    height(int): original image's height\n"
+        "Return:\n"
+        "    image(bytes) : decoded image data"
+    );
 
 PyObject *etc1(PyObject *self, PyObject *args, PyObject *kwargs) {
     /* Shared references that do not need Py_DECREF before returning. */
@@ -35,11 +45,32 @@ PyObject *etc1(PyObject *self, PyObject *args, PyObject *kwargs) {
 	return Py_BuildValue("y#", (char*)image, x * y * sizeof(uint32_t));
 }
 
+PyObject *etc2a8(PyObject *self, PyObject *args, PyObject *kwargs) {
+    /* Shared references that do not need Py_DECREF before returning. */
+	const char *rawdata;
+	int rawdata_len;
+    int x = 0;
+	int y = 0;
+
+    /* Parse positional and keyword arguments */
+    static char* keywords[] = { "rawdata", "width", "height", NULL };
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "y#ii", keywords, &rawdata, &rawdata_len, &x, &y)) {
+        return NULL;
+    }
+
+    /* Function implementation starts here */
+	uint32_t *image = (uint32_t*)calloc(x * y, sizeof(uint32_t));
+	decode_etc2a8((uint64_t*)rawdata, x, y, image);
+
+	return Py_BuildValue("y#", (char*)image, x * y * sizeof(uint32_t));
+}
+
 /*
  * List of functions to add to etcpy in exec_etcpy().
  */
 static PyMethodDef etcpy_functions[] = {
     { "decode_etc1", (PyCFunction)etc1, METH_VARARGS | METH_KEYWORDS, etc1_doc },
+    { "decode_etc2a8", (PyCFunction)etc2a8, METH_VARARGS | METH_KEYWORDS, etc2a8_doc },
     { NULL, NULL, 0, NULL } /* marks end of array */
 };
 
@@ -51,7 +82,7 @@ int exec_etcpy(PyObject *module) {
     PyModule_AddFunctions(module, etcpy_functions);
 
     PyModule_AddStringConstant(module, "__author__", "krepe-suZette");
-    PyModule_AddStringConstant(module, "__version__", "0.1.0");
+    PyModule_AddStringConstant(module, "__version__", "0.1.1");
     PyModule_AddIntConstant(module, "year", 2018);
 
     return 0; /* success */
