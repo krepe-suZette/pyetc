@@ -10,9 +10,9 @@ pip install .
 ## Usage
 ```python
 import cv2
-import etcpy
+import pyetc
 
-res = etcpy.decode_etc1(rawdata, width, height)
+res = pyetc.decode_etc1(rawdata, width, height)
 ```
 
 ## Original source
