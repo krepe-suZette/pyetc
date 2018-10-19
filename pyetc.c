@@ -66,51 +66,51 @@ PyObject *etc2a8(PyObject *self, PyObject *args, PyObject *kwargs) {
 }
 
 /*
- * List of functions to add to etcpy in exec_etcpy().
+ * List of functions to add to pyetc in exec_pyetc().
  */
-static PyMethodDef etcpy_functions[] = {
+static PyMethodDef pyetc_functions[] = {
     { "decode_etc1", (PyCFunction)etc1, METH_VARARGS | METH_KEYWORDS, etc1_doc },
     { "decode_etc2a8", (PyCFunction)etc2a8, METH_VARARGS | METH_KEYWORDS, etc2a8_doc },
     { NULL, NULL, 0, NULL } /* marks end of array */
 };
 
 /*
- * Initialize etcpy. May be called multiple times, so avoid
+ * Initialize pyetc. May be called multiple times, so avoid
  * using static state.
  */
-int exec_etcpy(PyObject *module) {
-    PyModule_AddFunctions(module, etcpy_functions);
+int exec_pyetc(PyObject *module) {
+    PyModule_AddFunctions(module, pyetc_functions);
 
     PyModule_AddStringConstant(module, "__author__", "krepe-suZette");
-    PyModule_AddStringConstant(module, "__version__", "0.1.1");
+    PyModule_AddStringConstant(module, "__version__", "0.2.0");
     PyModule_AddIntConstant(module, "year", 2018);
 
     return 0; /* success */
 }
 
 /*
- * Documentation for etcpy.
+ * Documentation for pyetc.
  */
-PyDoc_STRVAR(etcpy_doc, "Decode ETC image data to RGBA string");
+PyDoc_STRVAR(pyetc_doc, "Decode ETC image data to RGBA string");
 
 
-static PyModuleDef_Slot etcpy_slots[] = {
-    { Py_mod_exec, exec_etcpy },
+static PyModuleDef_Slot pyetc_slots[] = {
+    { Py_mod_exec, exec_pyetc },
     { 0, NULL }
 };
 
-static PyModuleDef etcpy_def = {
+static PyModuleDef pyetc_def = {
     PyModuleDef_HEAD_INIT,
-    "etcpy",
-    etcpy_doc,
+    "pyetc",
+    pyetc_doc,
     0,              /* m_size */
     NULL,           /* m_methods */
-    etcpy_slots,
+    pyetc_slots,
     NULL,           /* m_traverse */
     NULL,           /* m_clear */
     NULL,           /* m_free */
 };
 
-PyMODINIT_FUNC PyInit_etcpy() {
-    return PyModuleDef_Init(&etcpy_def);
+PyMODINIT_FUNC PyInit_pyetc() {
+    return PyModuleDef_Init(&pyetc_def);
 }
