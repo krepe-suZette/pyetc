@@ -42,7 +42,10 @@ PyObject *etc1(PyObject *self, PyObject *args, PyObject *kwargs) {
 	uint32_t *image = (uint32_t*)calloc(x * y, sizeof(uint32_t));
 	decode_etc1((uint64_t*)rawdata, x, y, image);
 
-	return Py_BuildValue("y#", (char*)image, x * y * sizeof(uint32_t));
+	PyObject *result = Py_BuildValue("y#", (char*)image, x * y * sizeof(uint32_t));
+	free(image);
+
+	return result;
 }
 
 PyObject *etc2a8(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -62,7 +65,10 @@ PyObject *etc2a8(PyObject *self, PyObject *args, PyObject *kwargs) {
 	uint32_t *image = (uint32_t*)calloc(x * y, sizeof(uint32_t));
 	decode_etc2a8((uint64_t*)rawdata, x, y, image);
 
-	return Py_BuildValue("y#", (char*)image, x * y * sizeof(uint32_t));
+	PyObject *result = Py_BuildValue("y#", (char*)image, x * y * sizeof(uint32_t));
+	free(image);
+
+	return result;
 }
 
 /*
